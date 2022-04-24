@@ -18,12 +18,10 @@ class BookReservationTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $response = $this->post('/book', [
+        $this->post('/book', [
             'title' => 'Harry Potter',
             'author' => 'Nikita'
         ]);
-
-        $response->assertOk();
 
         $this->assertCount(1, Book::all());
     }
@@ -58,5 +56,20 @@ class BookReservationTest extends TestCase
 
         $this->assertEquals('Harry not Potter', Book::first()->title);
         $this->assertEquals('not Nikita', Book::first()->author);
+    }
+
+    public function test_a_book_was_deleted()
+    {
+        $this->post('/book', [
+            'title' => 'Harry Potter',
+            'author' => 'Nikita'
+        ]);
+
+        $book = Book::first();
+
+        $response = $this->delete('books/' . $book->id);
+
+        $this->assertCount(0, Book::all());
+        $response->assertRedirect('books');
     }
 }
