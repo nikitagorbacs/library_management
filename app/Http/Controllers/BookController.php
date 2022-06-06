@@ -9,6 +9,7 @@ class BookController extends Controller
 {
     public function index()
     {
+        //Get all books
         $books = Book::all();
 
         return $books;
